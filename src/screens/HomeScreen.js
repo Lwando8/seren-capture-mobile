@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { AppIcon } from '../components/Icon';
 import { COLORS, SIZES } from '../constants/theme';
 import apiService from '../services/apiService';
 
@@ -100,7 +101,10 @@ const HomeScreen = ({ navigation }) => {
           {/* Demo Mode Info */}
           {demoMode && demoOTPs.length > 0 && (
             <Card style={styles.demoCard}>
-              <Text style={styles.demoTitle}>🧪 Demo Mode Active</Text>
+              <View style={styles.demoHeader}>
+                <AppIcon.Demo size={20} color={COLORS.white} />
+                <Text style={styles.demoTitle}>Demo Mode Active</Text>
+              </View>
               <Text style={styles.demoSubtitle}>Try these sample OTPs:</Text>
               {demoOTPs.map((demo) => (
                 <Button
@@ -173,21 +177,26 @@ const HomeScreen = ({ navigation }) => {
           {/* Instructions */}
           <Card>
             <Text style={styles.instructionsTitle}>How to Use</Text>
-            <Text style={styles.instructionStep}>
-              1. 📱 Ask visitor for their One-Time-PIN (OTP)
-            </Text>
-            <Text style={styles.instructionStep}>
-              2. 🔍 Enter the OTP and tap "Search"
-            </Text>
-            <Text style={styles.instructionStep}>
-              3. 🎯 Select capture mode (Pedestrian/Vehicle)
-            </Text>
-            <Text style={styles.instructionStep}>
-              4. 📷 Capture required images
-            </Text>
-            <Text style={styles.instructionStep}>
-              5. ✅ Complete the process
-            </Text>
+            <View style={styles.instructionStep}>
+              <AppIcon.Phone size={16} color={COLORS.primary} style={styles.instructionIcon} />
+              <Text style={styles.instructionText}>Ask visitor for their One-Time-PIN (OTP)</Text>
+            </View>
+            <View style={styles.instructionStep}>
+              <AppIcon.Search size={16} color={COLORS.primary} style={styles.instructionIcon} />
+              <Text style={styles.instructionText}>Enter the OTP and tap "Search"</Text>
+            </View>
+            <View style={styles.instructionStep}>
+              <AppIcon.Settings size={16} color={COLORS.primary} style={styles.instructionIcon} />
+              <Text style={styles.instructionText}>Select capture mode (Pedestrian/Vehicle)</Text>
+            </View>
+            <View style={styles.instructionStep}>
+              <AppIcon.Camera size={16} color={COLORS.primary} style={styles.instructionIcon} />
+              <Text style={styles.instructionText}>Capture required images</Text>
+            </View>
+            <View style={styles.instructionStep}>
+              <AppIcon.Check size={16} color={COLORS.primary} style={styles.instructionIcon} />
+              <Text style={styles.instructionText}>Complete the process</Text>
+            </View>
           </Card>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -229,11 +238,16 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
     borderWidth: 1,
   },
+  demoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SIZES.sm,
+  },
   demoTitle: {
     fontSize: SIZES.h3,
     fontWeight: 'bold',
     color: COLORS.white,
-    marginBottom: SIZES.sm,
+    marginLeft: SIZES.sm,
   },
   demoSubtitle: {
     fontSize: SIZES.body,
@@ -306,10 +320,18 @@ const styles = StyleSheet.create({
     marginBottom: SIZES.md,
   },
   instructionStep: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SIZES.sm,
+  },
+  instructionIcon: {
+    marginRight: SIZES.sm,
+  },
+  instructionText: {
     fontSize: SIZES.body,
     color: COLORS.textSecondary,
-    marginBottom: SIZES.sm,
     lineHeight: 20,
+    flex: 1,
   },
 });
 

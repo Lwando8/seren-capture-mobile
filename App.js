@@ -35,7 +35,7 @@ export default function App() {
             name="Home" 
             component={HomeScreen}
             options={{
-              title: '🏠 Seren Capture',
+              title: 'Seren Capture',
               headerLeft: () => null, // Disable back button on home
             }}
           />

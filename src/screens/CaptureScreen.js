@@ -14,6 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { AppIcon } from '../components/Icon';
 import { COLORS, SIZES, SHADOWS } from '../constants/theme';
 import apiService from '../services/apiService';
 
@@ -127,24 +128,27 @@ const CaptureScreen = ({ navigation, route }) => {
       return [
         {
           type: 'person',
-          title: '📄 Person Identification',
+          title: 'Person Identification',
           description: 'Capture ID, Passport, or Driver\'s License',
           required: true,
+          icon: 'ID',
         },
       ];
     } else {
       return [
         {
           type: 'person',
-          title: '📄 Person Identification',
+          title: 'Person Identification',
           description: 'Capture ID, Passport, or Driver\'s License',
           required: true,
+          icon: 'ID',
         },
         {
           type: 'vehicle',
-          title: '🚗 Vehicle Identification',
+          title: 'Vehicle Identification',
           description: 'Capture License Disc or License Plate',
           required: true,
+          icon: 'License',
         },
       ];
     }
@@ -234,16 +238,22 @@ const CaptureScreen = ({ navigation, route }) => {
   );
 };
 
-const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }) => (
-  <Card>
-    <View style={styles.captureHeader}>
-      <Text style={styles.captureTitle}>{captureInfo.title}</Text>
-      {captureInfo.required && (
-        <View style={styles.requiredBadge}>
-          <Text style={styles.requiredText}>Required</Text>
+const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }) => {
+  const IconComponent = AppIcon[captureInfo.icon];
+  
+  return (
+    <Card>
+      <View style={styles.captureHeader}>
+        <View style={styles.captureTitleContainer}>
+          <IconComponent size={20} color={COLORS.primary} style={styles.captureIcon} />
+          <Text style={styles.captureTitle}>{captureInfo.title}</Text>
         </View>
-      )}
-    </View>
+        {captureInfo.required && (
+          <View style={styles.requiredBadge}>
+            <Text style={styles.requiredText}>Required</Text>
+          </View>
+        )}
+      </View>
     
     <Text style={styles.captureDescription}>
       {captureInfo.description}
@@ -254,11 +264,12 @@ const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }
         <Image source={{ uri: captured.uri }} style={styles.capturedImage} />
         <View style={styles.capturedActions}>
           <Button
-            title="📷 Re-capture"
+            title="Re-capture"
             size="small"
             onPress={onCapture}
             disabled={disabled}
             style={styles.actionButton}
+            icon={<AppIcon.Camera size={14} color={COLORS.white} />}
           />
           <Button
             title="Remove"
@@ -270,18 +281,23 @@ const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }
           />
         </View>
         <View style={styles.completedBadge}>
-          <Text style={styles.completedText}>✓ Captured</Text>
+          <AppIcon.Check size={14} color={COLORS.white} />
+          <Text style={styles.completedText}>Captured</Text>
         </View>
       </View>
     ) : (
       <View style={styles.captureArea}>
-        <Text style={styles.captureAreaText}>
-          📷 Tap to open camera and capture {captureInfo.title.toLowerCase()}
-        </Text>
+        <View style={styles.captureAreaContent}>
+          <AppIcon.CameraOutline size={32} color={COLORS.textSecondary} />
+          <Text style={styles.captureAreaText}>
+            Tap to open camera and capture {captureInfo.title.toLowerCase()}
+          </Text>
+        </View>
         <Button
-          title={`📷 Open Camera - ${captureInfo.type === 'person' ? 'ID' : 'Vehicle'}`}
+          title={`Open Camera - ${captureInfo.type === 'person' ? 'ID' : 'Vehicle'}`}
           onPress={onCapture}
           disabled={disabled}
+          icon={<AppIcon.Camera size={16} color={COLORS.white} />}
         />
       </View>
     )}
@@ -335,11 +351,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: SIZES.sm,
   },
+  captureTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  captureIcon: {
+    marginRight: SIZES.sm,
+  },
   captureTitle: {
     fontSize: SIZES.h3,
     fontWeight: 'bold',
     color: COLORS.text,
-    flex: 1,
   },
   requiredBadge: {
     backgroundColor: COLORS.warning,
@@ -382,11 +405,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: SIZES.sm,
     paddingVertical: SIZES.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   completedText: {
     fontSize: SIZES.caption,
     fontWeight: 'bold',
     color: COLORS.white,
+    marginLeft: SIZES.xs,
   },
   captureArea: {
     borderWidth: 2,
@@ -397,11 +423,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.light,
   },
+  captureAreaContent: {
+    alignItems: 'center',
+    marginBottom: SIZES.lg,
+  },
   captureAreaText: {
     fontSize: SIZES.body,
     color: COLORS.textSecondary,
     textAlign: 'center',
-    marginBottom: SIZES.lg,
+    marginTop: SIZES.md,
   },
   buttonsContainer: {
     marginTop: SIZES.lg,

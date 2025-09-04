@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { AppIcon } from '../components/Icon';
 import { COLORS, SIZES, SHADOWS } from '../constants/theme';
 import apiService from '../services/apiService';
 
@@ -22,17 +23,19 @@ const ModeSelectionScreen = ({ navigation, route }) => {
   const modes = [
     {
       id: 'pedestrian',
-      title: '🚶 Pedestrian',
+      title: 'Pedestrian',
       description: 'Capture ID/Passport only',
       details: 'For visitors arriving on foot',
       captures: ['Person Identification'],
+      icon: 'PersonWalk',
     },
     {
       id: 'vehicle',
-      title: '🚗 Vehicle',
+      title: 'Vehicle',
       description: 'Capture ID + Vehicle',
       details: 'For visitors arriving by vehicle',
       captures: ['Person Identification', 'Vehicle License'],
+      icon: 'Vehicle',
     },
   ];
 
@@ -154,29 +157,39 @@ const InfoRow = ({ label, value }) => (
   </View>
 );
 
-const ModeCard = ({ mode, selected, onSelect }) => (
-  <TouchableOpacity
-    style={[
-      styles.modeCard,
-      selected && styles.modeCardSelected,
-    ]}
-    onPress={onSelect}
-    activeOpacity={0.8}
-  >
-    <View style={styles.modeHeader}>
-      <Text style={[
-        styles.modeTitle,
-        selected && styles.modeTitleSelected,
-      ]}>
-        {mode.title}
-      </Text>
-      <Text style={[
-        styles.modeDescription,
-        selected && styles.modeDescriptionSelected,
-      ]}>
-        {mode.description}
-      </Text>
-    </View>
+const ModeCard = ({ mode, selected, onSelect }) => {
+  const IconComponent = AppIcon[mode.icon];
+  
+  return (
+    <TouchableOpacity
+      style={[
+        styles.modeCard,
+        selected && styles.modeCardSelected,
+      ]}
+      onPress={onSelect}
+      activeOpacity={0.8}
+    >
+      <View style={styles.modeHeader}>
+        <View style={styles.modeTitleContainer}>
+          <IconComponent 
+            size={24} 
+            color={selected ? COLORS.white : COLORS.primary} 
+            style={styles.modeIcon}
+          />
+          <Text style={[
+            styles.modeTitle,
+            selected && styles.modeTitleSelected,
+          ]}>
+            {mode.title}
+          </Text>
+        </View>
+        <Text style={[
+          styles.modeDescription,
+          selected && styles.modeDescriptionSelected,
+        ]}>
+          {mode.description}
+        </Text>
+      </View>
     
     <Text style={[
       styles.modeDetails,
@@ -207,11 +220,13 @@ const ModeCard = ({ mode, selected, onSelect }) => (
     
     {selected && (
       <View style={styles.selectedIndicator}>
-        <Text style={styles.selectedText}>✓ Selected</Text>
+        <AppIcon.Check size={16} color={COLORS.white} />
+        <Text style={styles.selectedText}>Selected</Text>
       </View>
     )}
   </TouchableOpacity>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -275,11 +290,18 @@ const styles = StyleSheet.create({
   modeHeader: {
     marginBottom: SIZES.md,
   },
+  modeTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: SIZES.xs,
+  },
+  modeIcon: {
+    marginRight: SIZES.sm,
+  },
   modeTitle: {
     fontSize: SIZES.h3,
     fontWeight: 'bold',
     color: COLORS.text,
-    marginBottom: SIZES.xs,
   },
   modeTitleSelected: {
     color: COLORS.white,
@@ -332,11 +354,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: SIZES.sm,
     paddingVertical: SIZES.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   selectedText: {
     fontSize: SIZES.caption,
     fontWeight: 'bold',
     color: COLORS.white,
+    marginLeft: SIZES.xs,
   },
   buttonsContainer: {
     marginTop: SIZES.lg,

@@ -8,6 +8,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import { AppIcon } from '../components/Icon';
 import { COLORS, SIZES } from '../constants/theme';
 
 const CompletionScreen = ({ navigation, route }) => {
@@ -27,7 +28,7 @@ const CompletionScreen = ({ navigation, route }) => {
   };
 
   const getStatusIcon = (hasCapture) => {
-    return hasCapture ? '✅' : '❌';
+    return hasCapture ? <AppIcon.Check size={16} color={COLORS.completedText} /> : <AppIcon.Close size={16} color={COLORS.errorText} />;
   };
 
   const getStatusText = (hasCapture) => {
@@ -46,7 +47,7 @@ const CompletionScreen = ({ navigation, route }) => {
       >
         {/* Success Header */}
         <View style={styles.successHeader}>
-          <Text style={styles.successIcon}>✅</Text>
+          <AppIcon.CheckOutline size={64} color={COLORS.success} />
           <Text style={styles.successTitle}>Capture Complete!</Text>
           <Text style={styles.successSubtitle}>
             All required images have been captured and processed
@@ -164,9 +165,12 @@ const CaptureStatusRow = ({ type, hasCapture, details }) => (
       )}
     </View>
     <View style={[styles.captureStatus, getStatusStyle(hasCapture)]}>
-      <Text style={styles.captureStatusText}>
-        {getStatusIcon(hasCapture)} {getStatusText(hasCapture)}
-      </Text>
+      <View style={styles.captureStatusContent}>
+        {getStatusIcon(hasCapture)}
+        <Text style={styles.captureStatusText}>
+          {getStatusText(hasCapture)}
+        </Text>
+      </View>
     </View>
   </View>
 );
@@ -196,10 +200,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: SIZES.xl,
     paddingVertical: SIZES.xl,
-  },
-  successIcon: {
-    fontSize: 64,
-    marginBottom: SIZES.md,
   },
   successTitle: {
     fontSize: SIZES.h1,
@@ -273,10 +273,15 @@ const styles = StyleSheet.create({
     paddingVertical: SIZES.sm,
     borderRadius: 20,
   },
+  captureStatusContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   captureStatusText: {
     fontSize: SIZES.caption,
     fontWeight: 'bold',
     color: COLORS.text,
+    marginLeft: SIZES.xs,
   },
   statusCompleted: {
     backgroundColor: COLORS.completed,
