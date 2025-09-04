@@ -5,7 +5,7 @@ class ApiService {
     // Update this to your backend URL
     // For development with Expo, use your computer's IP address
     this.baseURL = __DEV__ 
-      ? 'http://192.168.5.40:3000/api/capture' // Your computer's IP
+      ? 'http://192.168.5.40:3000/api/capture' // Demo mode - connects to local backend
       : 'https://your-production-url.com/api/capture';
     
     this.client = axios.create({
@@ -15,6 +15,11 @@ class ApiService {
         'Content-Type': 'application/json',
       },
     });
+
+    // Log demo mode status
+    if (__DEV__) {
+      console.log('🧪 DEMO MODE: Mobile app connecting to local backend at:', this.baseURL);
+    }
 
     // Add request interceptor
     this.client.interceptors.request.use(

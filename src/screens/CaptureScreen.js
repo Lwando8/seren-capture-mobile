@@ -65,38 +65,10 @@ const CaptureScreen = ({ navigation, route }) => {
     }
   };
 
-  const selectFromGallery = async (captureType) => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.8,
-        base64: false,
-      });
-
-      if (!result.canceled && result.assets[0]) {
-        setCaptures(prev => ({
-          ...prev,
-          [captureType]: result.assets[0],
-        }));
-      }
-    } catch (error) {
-      Alert.alert('Gallery Error', 'Failed to select image. Please try again.');
-      console.error('Gallery error:', error);
-    }
-  };
 
   const showImageOptions = (captureType) => {
-    Alert.alert(
-      'Select Image',
-      'Choose how you want to capture the image',
-      [
-        { text: 'Camera', onPress: () => captureImage(captureType) },
-        { text: 'Gallery', onPress: () => selectFromGallery(captureType) },
-        { text: 'Cancel', style: 'cancel' },
-      ]
-    );
+    // Directly open camera for security purposes - no gallery option
+    captureImage(captureType);
   };
 
   const removeCapture = (captureType) => {
@@ -282,7 +254,7 @@ const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }
         <Image source={{ uri: captured.uri }} style={styles.capturedImage} />
         <View style={styles.capturedActions}>
           <Button
-            title="Re-capture"
+            title="📷 Re-capture"
             size="small"
             onPress={onCapture}
             disabled={disabled}
@@ -304,10 +276,10 @@ const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }
     ) : (
       <View style={styles.captureArea}>
         <Text style={styles.captureAreaText}>
-          📷 Tap to capture {captureInfo.title.toLowerCase()}
+          📷 Tap to open camera and capture {captureInfo.title.toLowerCase()}
         </Text>
         <Button
-          title={`Capture ${captureInfo.type === 'person' ? 'ID' : 'Vehicle'}`}
+          title={`📷 Open Camera - ${captureInfo.type === 'person' ? 'ID' : 'Vehicle'}`}
           onPress={onCapture}
           disabled={disabled}
         />
