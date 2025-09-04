@@ -302,7 +302,8 @@ const CaptureSection = ({ captureInfo, captured, onCapture, onRemove, disabled }
       </View>
     )}
   </Card>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
